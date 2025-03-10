@@ -6,12 +6,11 @@
 /*   By: YourName <your.email@example.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:49:29 by YourName          #+#    #+#             */
-/*   Updated: 2025/03/02 19:04:28 by YourName         ###   ########.fr       */
+/*   Updated: 2025/03/06 13:46:24 by YourName         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/includes/libft.h"
-
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +26,7 @@ void	send_char(pid_t server_pid, char c)
 			kill(server_pid, SIGUSR2); // 1 を送信
 		else
 			kill(server_pid, SIGUSR1); // 0 を送信
-		usleep(100);                   // 送信間隔を確保
+		usleep(500);                   // 送信間隔を確保
 	}
 }
 
@@ -38,10 +37,10 @@ int	main(int argc, char *argv[])
 
 	if (argc != 3)
 	{
-		printf("Usage: %s <server_pid> <message>\n", argv[0]);
+		ft_printf("Usage: %s <server_pid> <message>\n", argv[0]);
 		return (1);
 	}
-	server_pid = atoi(argv[1]);
+	server_pid = ft_atoi(argv[1]);
 	message = argv[2];
 	for (int i = 0; message[i] != '\0'; i++)
 	{
@@ -49,6 +48,55 @@ int	main(int argc, char *argv[])
 	}
 	return (0);
 }
+
+// #include "libft/includes/libft.h"
+// #include <signal.h>
+// #include <stdlib.h>
+// #include <unistd.h>
+
+// volatile sig_atomic_t	signal_received = 0;
+
+// void	signal_handler(int sig)
+// {
+// 	(void)sig;
+// 	signal_received = 1;
+// }
+
+// void	send_char(pid_t server_pid, char c)
+// {
+// 	for (int i = 7; i >= 0; i--)
+// 	{
+// 		signal_received = 0;
+// 		if ((c >> i) & 1)
+// 			kill(server_pid, SIGUSR2); // 1 を送信
+// 		else
+// 			kill(server_pid, SIGUSR1); // 0 を送信
+// 		while (!signal_received)       // サーバーからの応答を待つ
+// 			pause();
+// 	}
+// }
+
+// int	main(int argc, char *argv[])
+// {
+// 	pid_t	server_pid;
+// 	char	*message;
+
+// 	if (argc != 3)
+// 	{
+// 		ft_printf("Usage: %s <server_pid> <message>\n", argv[0]);
+// 		return (1);
+// 	}
+// 	server_pid = (pid_t)ft_atoi(argv[1]);
+// 	message = argv[2];
+// 	// シグナルハンドラの設定
+// 	signal(SIGUSR1, signal_handler);
+// 	// メッセージの送信
+// 	for (int i = 0; message[i] != '\0'; i++)
+// 		send_char(server_pid, message[i]);
+// 	// 終了を示す NULL 文字を送信
+// 	send_char(server_pid, '\0');
+// 	return (0);
+// }
 
 // void	send_signal(const pid_t pid, char character)
 // {
